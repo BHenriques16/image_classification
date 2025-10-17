@@ -9,14 +9,13 @@ import random
 
 
 # list of the different folders
-folders = ['dataset_waste_container/container_ash', 
-            'dataset_waste_container/container_battery', 
-            'dataset_waste_container/container_biodegradable', 
-            'dataset_waste_container/container_blue',
-            'dataset_waste_container/container_default',
-            'dataset_waste_container/container_green',
-            'dataset_waste_container/container_oil',
-            'dataset_waste_container/container_yellow'
+folders = ['dataset_waste_container/container_battery', 
+           'dataset_waste_container/container_biodegradable', 
+           'dataset_waste_container/container_blue',
+           'dataset_waste_container/container_default',
+           'dataset_waste_container/container_green',
+           'dataset_waste_container/container_oil',
+           'dataset_waste_container/container_yellow'
             ]  
 
 # lighting variability
@@ -70,8 +69,8 @@ for folder in folders:
     mean_colors[folder.split('/')[-1]] = np.mean(colors, axis=0)
 
 #print('Mean RGB colors per class:')
-for classe, color in mean_colors.items():
-    print(f'{classe}: R={color[0]:.1f}, G={color[1]:.1f}, B={color[2]:.1f}')
+#for classe, color in mean_colors.items():
+    #print(f'{classe}: R={color[0]:.1f}, G={color[1]:.1f}, B={color[2]:.1f}')
 #print('\n')    
     
 
