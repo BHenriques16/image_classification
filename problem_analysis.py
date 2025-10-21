@@ -89,3 +89,21 @@ for i in range(len(class_names)):
         dist = color_distance(colors[i], colors[j])
         #if dist < threshold:
             #print(f"{class_names[i]} and {class_names[j]} - distance: {dist:.2f}")
+            
+
+# Number of images per class
+
+import os
+
+data_dir = 'dataset_waste_container'
+
+class_counts = {}
+
+for class_folder in os.listdir(data_dir):
+    folder_path = os.path.join(data_dir, class_folder)
+    if os.path.isdir(folder_path):
+        num_images = len([f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))])
+        class_counts[class_folder] = num_images
+
+for classe, total in class_counts.items():
+    print(f'{classe}: {total} imagens')
