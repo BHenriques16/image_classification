@@ -2,13 +2,11 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, random_split
-from torchvision import datasets, transforms
-import torch.nn.functional as F
-import os
+from torchvision import datasets
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 import time
-from data_preparation import create_data_transforms
+from scripts.data_transformation import create_data_transforms
 from cnn import CNNModel
 
 # Early stopping class
