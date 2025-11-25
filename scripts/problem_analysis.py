@@ -5,6 +5,7 @@ import numpy as np
 import os
 import random
 
+
 # list of the different folders
 folders = ['dataset_waste_container/container_battery', 
            'dataset_waste_container/container_biodegradable', 
@@ -65,29 +66,12 @@ for folder in folders:
             colors.append(avg_color)
     mean_colors[folder.split('/')[-1]] = np.mean(colors, axis=0)
 
-#print('Mean RGB colors per class:')
-#for classe, color in mean_colors.items():
-    #print(f'{classe}: R={color[0]:.1f}, G={color[1]:.1f}, B={color[2]:.1f}')
-#print('\n')    
-    
+print('Mean RGB colors per class:')
+for classe, color in mean_colors.items():
+    print(f'{classe}: R={color[0]:.1f}, G={color[1]:.1f}, B={color[2]:.1f}')
+print('\n')    
 
-class_names = list(mean_colors.keys())
-colors = np.array(list(mean_colors.values()))
-
-# euclidian distance
-def color_distance(c1, c2):
-    return np.linalg.norm(c1 - c2)
-
-threshold = 30  # or 20 to only deal with the most serious case
-
-#print("Classes with very close average colors (distance < threshold):")
-for i in range(len(class_names)):
-    for j in range(i+1, len(class_names)):
-        dist = color_distance(colors[i], colors[j])
-        #if dist < threshold:
-            #print(f"{class_names[i]} and {class_names[j]} - distance: {dist:.2f}")
             
-
 # Number of images per class
 
 import os
