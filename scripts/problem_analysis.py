@@ -73,9 +73,6 @@ print('\n')
 
             
 # Number of images per class
-
-import os
-
 data_dir = 'dataset_waste_container'
 
 class_counts = {}
@@ -86,5 +83,5 @@ for class_folder in os.listdir(data_dir):
         num_images = len([f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))])
         class_counts[class_folder] = num_images
 
-#for classe, total in class_counts.items():
-    #print(f'{classe}: {total} imagens')
+for classe, total in class_counts.items():
+    print(f'{classe}: {total} imagens')
