@@ -1,0 +1,15 @@
+                         precision    recall  f1-score   support
+
+      container_battery     0.9574    1.0000    0.9783        90
+container_biodegradable     1.0000    0.6842    0.8125        19
+         container_blue     0.9969    0.9969    0.9969       327
+      container_default     0.9958    1.0000    0.9979       949
+        container_green     0.9968    0.9873    0.9920       314
+          container_oil     1.0000    1.0000    1.0000        56
+       container_yellow     0.9902    0.9934    0.9918       304
+
+               accuracy                         0.9937      2059
+              macro avg     0.9910    0.9517    0.9671      2059
+           weighted avg     0.9938    0.9937    0.9934      2059
+
+Test Loss: 0.0372, Test Accuracy: 99.37%

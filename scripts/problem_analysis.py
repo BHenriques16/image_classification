@@ -1,12 +1,9 @@
-# Problem analysis
-
 # library import
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 import os
 import random
-
 
 # list of the different folders
 folders = ['dataset_waste_container/container_battery', 
