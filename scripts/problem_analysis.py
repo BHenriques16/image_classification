@@ -5,7 +5,6 @@ import numpy as np
 import os
 import random
 
-
 # list of the different folders
 folders = ['dataset_waste_container/container_battery', 
            'dataset_waste_container/container_biodegradable', 
@@ -28,7 +27,6 @@ for folder in folders:
         mean_brightness.append(gray.mean())             # calculates and saves the average brightness per image             
     #print(f'{folder.split("/")[-1]} - Mean: {np.mean(mean_brightness):.2f} | Standard Deviation: {np.std(mean_brightness):.2f}')
 
-
 # angle problem
 for folder in folders:
     images = os.listdir(folder)
@@ -48,7 +46,6 @@ for folder in folders:
     plt.tight_layout()
     #plt.show()
 
-
 # similar colors between classes
 mean_colors = {}
 
@@ -66,12 +63,11 @@ for folder in folders:
             colors.append(avg_color)
     mean_colors[folder.split('/')[-1]] = np.mean(colors, axis=0)
 
-print('Mean RGB colors per class:')
-for classe, color in mean_colors.items():
-    print(f'{classe}: R={color[0]:.1f}, G={color[1]:.1f}, B={color[2]:.1f}')
-print('\n')    
+#print('Mean RGB colors per class:')
+#for classe, color in mean_colors.items():
+    #print(f'{classe}: R={color[0]:.1f}, G={color[1]:.1f}, B={color[2]:.1f}')
+#print('\n')             
 
-            
 # Number of images per class
 data_dir = 'dataset_waste_container'
 
@@ -83,5 +79,5 @@ for class_folder in os.listdir(data_dir):
         num_images = len([f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))])
         class_counts[class_folder] = num_images
 
-for classe, total in class_counts.items():
-    print(f'{classe}: {total} imagens')
+#for classe, total in class_counts.items():
+    #print(f'{classe}: {total} imagens')
