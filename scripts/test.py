@@ -20,7 +20,7 @@ img_size = 224
 batch_size = 16
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model_path = "models/best_model.pth"
-N_EXAMPLES = 6
+N_EXAMPLES = 7
 
 # Data Loading
 _, test_transforms = create_data_transforms(img_size)
@@ -39,7 +39,29 @@ model.eval()
 # Focal loss function
 criterion = FocalLoss(alpha=1, gamma=2)
 
-# Grad-CAM Visualization: (side by side)
+# Calculate Test Loss and Accuracy
+all_preds = []
+all_labels = []
+test_loss = 0.0
+correct = 0
+total = 0
+with torch.no_grad():
+    for inputs, labels in test_loader:
+        inputs, labels = inputs.to(device), labels.to(device)
+        outputs = model(inputs)
+        loss = criterion(outputs, labels)
+        test_loss += loss.item() * inputs.size(0)
+        _, preds = outputs.max(1)
+        correct += preds.eq(labels).sum().item()
+        total += labels.size(0)
+        all_preds.extend(preds.cpu().numpy())
+        all_labels.extend(labels.cpu().numpy())
+
+test_loss = test_loss / len(test_dataset)
+test_acc = 100. * correct / total
+print(f"Test Loss: {test_loss:.4f}, Test Accuracy: {test_acc:.2f}%")
+
+# Grad-CAM Visualization: (side by side, horizontal layout)
 try:
     shown_classes = set()
     shown_indices = []
@@ -51,7 +73,6 @@ try:
         if len(shown_indices) == N_EXAMPLES:
             break
 
-    print(f"\nGrad-CAM visualization for {len(shown_indices)} test images:")
     fig, axes = plt.subplots(nrows=2, ncols=N_EXAMPLES, figsize=(4*N_EXAMPLES, 6))
     for i, idx in enumerate(shown_indices):
         img, label = test_dataset[idx]
@@ -71,6 +92,7 @@ try:
         axes[1, i].set_title("Grad-CAM")
         axes[1, i].axis('off')
     plt.tight_layout()
+    os.makedirs("results", exist_ok=True)
     plt.savefig("results/gradcam_test_examples_horizontal.png")
     plt.show()
 
