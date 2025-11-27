@@ -1,6 +1,7 @@
 import torch
 from torch.utils.data import DataLoader, Subset
 from torchvision import datasets
+from sklearn.metrics import classification_report
 import numpy as np
 import matplotlib.pyplot as plt
 import os
@@ -59,7 +60,23 @@ with torch.no_grad():
 
 test_loss = test_loss / len(test_dataset)
 test_acc = 100. * correct / total
+
+# Print results
 print(f"Test Loss: {test_loss:.4f}, Test Accuracy: {test_acc:.2f}%")
+
+# Classification report (only present classes)
+labels_present = sorted(set(all_labels))
+class_names_present = [class_names[l] for l in labels_present]
+
+print("\nClassification Report:")
+class_report = classification_report(
+    all_labels, all_preds,
+    target_names=class_names_present,
+    labels=labels_present,
+    digits=4,
+    zero_division=0
+)
+print(class_report)
 
 # Grad-CAM Visualization: (side by side, horizontal layout)
 try:
@@ -73,6 +90,7 @@ try:
         if len(shown_indices) == N_EXAMPLES:
             break
 
+    print(f"\nGrad-CAM visualization for {len(shown_indices)} test images:")
     fig, axes = plt.subplots(nrows=2, ncols=N_EXAMPLES, figsize=(4*N_EXAMPLES, 6))
     for i, idx in enumerate(shown_indices):
         img, label = test_dataset[idx]
@@ -92,8 +110,7 @@ try:
         axes[1, i].set_title("Grad-CAM")
         axes[1, i].axis('off')
     plt.tight_layout()
-    os.makedirs("results", exist_ok=True)
-    plt.savefig("results/gradcam_test_examples_horizontal.png")
+    plt.savefig("results/grad_cam.png")
     plt.show()
 
 except Exception as e:
