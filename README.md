@@ -1,10 +1,5 @@
 # Automatic Waste Container Classification
 
-**Course:** Audiovisual Data Processing (Processamento de Dados Audiovisuais)
-**Institution:** Universidade da Beira Interior
-**Author:** Bernardo Vieira Henriques
-**Date:** 2025/2026
-
 ## Project Overview
 
 This project addresses the problem of automatic image classification for urban waste containers using Deep Learning techniques. The goal is to develop a computer vision system capable of recognizing seven distinct types of waste containers to support applications in smart city management and autonomous waste collection.
