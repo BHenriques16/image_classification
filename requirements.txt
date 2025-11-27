@@ -1,7 +1,9 @@
 torch
 torchvision
+torchaudio
 numpy
-scikit-learn
 matplotlib
+scikit-learn
 tqdm
 grad-cam
+pillow
