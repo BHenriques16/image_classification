@@ -5,34 +5,21 @@ import torch
 import torch.nn.functional as F
 from PIL import Image
 from torchvision import transforms
+from models_factory import get_model
 
-# --- Importação do Modelo ---
-try:
-    from models_factory import get_model
-except ImportError:
-    from torchvision import models
-    import torch.nn as nn
-    def get_model(model_name, num_classes):
-        model = models.resnet18(weights=None)
-        num_ftrs = model.fc.in_features
-        model.fc = nn.Linear(num_ftrs, num_classes)
-        return model
-
-# --- Configurações ---
+# Configs
 BASE_DIR = 'dataset_waste_container'  
 OUTPUT_CSV = 'relatorio_detalhado.csv'
 MODEL_PATH = 'models/resnet18_best.pth'
 
-# Detectar classes automaticamente (ordem alfabética, padrão do PyTorch)
-# Isto é crucial para que o índice 0 corresponda à mesma classe do treino
+# Automatically detect classes (alphabetical order, PyTorch default)
+# This is crucial so that index 0 corresponds to the same training class.
 CLASS_NAMES = sorted([d for d in os.listdir(BASE_DIR) if os.path.isdir(os.path.join(BASE_DIR, d))])
 NUM_CLASSES = len(CLASS_NAMES)
 
 print(f"Classes detetadas ({NUM_CLASSES}): {CLASS_NAMES}")
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-# --- Funções Auxiliares ---
 
 def get_transforms():
     return transforms.Compose([
@@ -52,14 +39,10 @@ def load_model():
     model.eval()
     return model
 
-# Inicialização Global
 model = load_model()
 transform = get_transforms()
 
-# --------------------------------------------------------------------------
-
 def classifier_predict(image_path):
-    """Retorna o índice, a probabilidade máxima e o array de probabilidades."""
     try:
         image = Image.open(image_path).convert('RGB')
         image_tensor = transform(image).unsqueeze(0).to(device)
@@ -80,7 +63,7 @@ def run_test():
     
     print(f"A iniciar avaliação em '{BASE_DIR}'...")
 
-    # Percorre pasta a pasta para saber a "Pasta_Real" (Ground Truth)
+    # Go through each folder to find the "Real_Folder" (Ground Truth).
     for class_folder in CLASS_NAMES:
         folder_path = os.path.join(BASE_DIR, class_folder)
         if not os.path.isdir(folder_path): continue
@@ -93,32 +76,26 @@ def run_test():
 
             filepath = os.path.join(folder_path, filename)
             
-            # Fazer a previsão
             pred_idx, max_prob = classifier_predict(filepath)
             
-            # Traduzir índice para nome da classe
             pred_class_name = CLASS_NAMES[pred_idx]
             
-            # Verificar acerto
             is_correct = (class_folder == pred_class_name)
-            acerto_str = f"• {is_correct}" # Formatação igual à imagem
+            acerto_str = f"• {is_correct}"
             
             row = {
                 'Imagem': filename,
-                'Pasta_Real': class_folder,       # Ground Truth
-                'Previsão_Classe': pred_class_name, # Predição
-                'Probabilidade_Max': f"{max_prob:.7f}", # Formatação decimal
+                'Pasta_Real': class_folder,      
+                'Previsão_Classe': pred_class_name, 
+                'Probabilidade_Max': f"{max_prob:.7f}", 
                 'Acerto': acerto_str
             }
             results_list.append(row)
 
-    # Criar DataFrame e Ordenar (opcional)
     df_results = pd.DataFrame(results_list)
     
-    # Exportar
     df_results.to_csv(OUTPUT_CSV, index=False)
     
-    # Configurar pandas para exibir bonito na consola (igual à imagem)
     pd.set_option('display.max_columns', None)
     pd.set_option('display.width', 1000)
     pd.set_option('display.colheader_justify', 'left')
@@ -128,7 +105,6 @@ def run_test():
     print("\n--- Amostra dos Resultados ---")
     print(df_results.head(10))
 
-    # Cálculo da Accuracy final deste teste
     if len(df_results) > 0:
         total_acc = df_results['Acerto'].str.contains('True').mean() * 100
         print(f"\nAccuracy Global neste conjunto: {total_acc:.2f}%")
